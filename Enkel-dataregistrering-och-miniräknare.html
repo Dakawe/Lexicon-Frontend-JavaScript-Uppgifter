@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      username = prompt("Enter your name:");
+      console.log("Välkommen tillbaka,", username);
+      function valid_birthyear(valid = false) {
+        valid ? (birthyear = Number(prompt("Wrong input. Only from year 1900 until now works."))) : (birthyear = Number(prompt("Enter your year of birth:")));
+        birthyear > 1900 && new Date().getFullYear() > birthyear ? (birthyear = new Date().getFullYear() - birthyear) : valid_birthyear(1);
+      }
+      valid_birthyear();
+      console.log(username, "fyller/har fyllt", birthyear, "i år.");
+      function valid_number(valid = false) {
+        valid ? (number = Number(prompt("Wrong input, only numbers valid."))) : (number = Number(prompt("Write any number:")));
+        Number.isFinite(number) ? 0 : valid_number(true);
+        return number;
+      }
+      n1 = valid_number();
+      n2 = valid_number();
+      console.log(`${n1}+${n2}=${n1 + n2}`);
+      console.log(`${n1}-${n2}=${n1 - n2}`);
+      console.log(`${n1}*${n2}=${n1 * n2}`);
+      console.log(`${n1}/${n2}=${n1 / n2}`);
+    </script>
+  </body>
+</html>
