@@ -1,60 +1,73 @@
-Skolan - Öva på att använda objekt i JS
-Denna uppgift går ut på att skapa olika typer av object-literals (som vi i framtiden endast kommer att kalla för OBJEKT för enkelhetens skull). Ni ska skapa en skola, som kommer att innehålla lärare som undervisar i kurser som läses utav studenter, så lite olika objekt innehållandes olika typer av data och även funktioner för att de olika typer av objekt ska kunna interagera med varandra. Det blir en rätt lång js-fil som ni får skriva men det får ni bara acceptera. Glöm inte att alla variablerna måste ligga högst upp i filen för att de ska vara tillgänglig för all kod nedanför. Övningen är mest till för att ni ska vänja er med syntaxen och bekanta er med styrkorna med objekt! Det här blir även en naturlig förberedels för objektorienterad programmering.
+Introduction
+JavaScript is a dynamic language, supporting object-oriented, imperative, and declarative (e.g. functional programming) styles.
 
-Börja med att skapa en skola som ett objekt. Objektet ska existera innuti en variabel som ni namnger med skolans namn för att göra det simpel. Skolan ska innehålla egenskaperna: name, address, zipcode, city, students med värdet av en tom array och teachers som en tom array. Till exempel:
-let lexicon = {
-name: "lexicon",
-students: [],
-teachers: [],
-/_skolans övriga egenskaper_/
-};
-Skapa tre stycken olika ämnen, varje ämne ska vara ett objekt med en variabel motsvarande namnet på ämnet. Egenskaperna ska vara name, students som en tom array och teacher som ett tomt objekt. Till Exempel:
-let matematik = {/_ämnets egenskaper här_/}
-Skapa fem stycken studenter, där namnet på studenten motsvara variabeln. Egenskaperna ska vara name, age, gender och subjects som en tom array.
+(Re-)Assignment
+There are a few primary ways to assign values to names in JavaScript - using variables or constants. On Exercism, variables are always written in camelCase; constants are written in SCREAMING_SNAKE_CASE. There is no official guide to follow, and various companies and organizations have various style guides. Feel free to write variables any way you like. The upside from writing them the way the exercises are prepared is that they'll be highlighted differently in the web interface and most IDEs.
 
-Skapa två stycken lärare med namnet som variabel och egenskaperna name och subjects som en tom array.
+Variables in JavaScript can be defined using the const, let or var keyword.
 
-Skriv en kodrad där du lägger till ett ämne i en lärares ämnesarray. push() eller unshift() Kommer du ihåg skillnaden på dem två? Skriv sen ut både läraren och ämnet du valde i konsolen och inspektera dem. Resonera, hur kan man använda den datan ur ett admins perspektiv på en skola, och tycker du den är komplett? Vad saknas?
+A variable can reference different values over its lifetime when using let or var. For example, myFirstVariable can be defined and redefined many times using the assignment operator =:
 
-Lägg till en student i ett ämnes studentarray. Skriv ut och inspektera i konsolen.
+let myFirstVariable = 1;
+myFirstVariable = 'Some string';
+myFirstVariable = new SomeComplexClass();
+In contrast to let and var, variables that are defined with const can only be assigned once. This is used to define constants in JavaScript.
 
-För att lösa problematiken i de två senaste uppgifterna så bör man i sådana här fall lägga till kopplingen i båda objekten. Alltså vi börjar med att lägga till ett ämne i en lärarens ämnesarray, och sen byter vi ut det tomma lärarobjekten i ämnet mot läraren. Då har vi en referens på båda sidorna. Egentligen är detta något som kallas för en cirkulär referens vilket vi helst vill undvika när vi programmerar, då kan orsaka krashar i vissa fall, men i syftet för uppgiften så är det ingen fara. Skapa nu en funktion som heter addSubjectToTeacher som tar emot ett ämne och en lärare, och parar ihop dessa. Returnera sen läraren så du kan se förändringen i lärarens ämnesarray.
+const MY_FIRST_CONSTANT = 10;
 
-Varför ha en fristående funktion som lägger till ämne till en lärare? Varför inte bara lägga till en funktion (alltså en metod eftersom funktionen då är kopplad till ett specifikt objekt) i lärarnas objekt som en egenskap? Till exempel:
+// Can not be re-assigned.
+MY_FIRST_CONSTANT = 20;
+// => TypeError: Assignment to constant variable.
+💡 In a later Concept Exercise the difference between constant assignment / binding and constant value is explored and explained.
 
-// Två sätt, antingen går du in i varje lärarobjekt och lägger till en egenskap:
-let niklas = {
-name: "niklas",
-subjects: [],
-addSubject: function(subject) {/_Logiken här_/}
+Function Declarations
+In JavaScript, units of functionality are encapsulated in functions, usually grouping functions together in the same file if they belong together. These functions can take parameters (arguments), and can return a value using the return keyword. Functions are invoked using () syntax.
+
+function add(num1, num2) {
+  return num1 + num2;
 }
 
-// Tänk på att "this" måste användas för att referera till det egna objektets egenskaper.
+add(1, 3);
+// => 4
+💡 In JavaScript there are many different ways to declare a function. These other ways look different than using the function keyword. The track tries to gradually introduce them, but if you already know about them, feel free to use any of them. In most cases, using one or the other isn't better or worse.
 
-// Andra sättet är att helt enkelt lägga till en egenskap med hjälp av punktnotation:
-niklas.addSubject = function(subject) {/_Logiken här_/};
+Exposing to Other Files
+To make a function, a constant, or a variable available in other files, they need to be exported using the export keyword. Another file may then import these using the import keyword. This is also known as the module system. A great example is how all the tests work. Each exercise has at least one file, for example lasagna.js, which contains the implementation. Additionally there is at least one other file, for example lasagna.spec.js, that contains the tests. This file imports the public (i.e. exported) entities in order to test the implementation:
 
-// Då kan vi ju sen kalla på denna metod via lärarobjektet.
-niklas.addSubject(Matematik);
+// file.js
+export const MY_VALUE = 10;
 
-// Prova det i konsolen!
-Skapa följande metoder (Någon eller ett par av metoderna kan förekomma flera gånger fast på olika objekt med olika logik) och lägg in de i rätt typ av objekt: addTeacher, enlistToSubject, addStudent, addSubject
+export function add(num1, num2) {
+  return num1 + num2;
+}
 
-Prova att leka runt med alla de skapade metoderna i konsolen och försöka lägga till i de olika objekten. Skriv ut objekten hela tiden och inspektera dem. Kan du tänka dig någon likhet med ett riktigt adminprogram för en skola där en admin till exempel skriver ut en lista på alla ämnen för att se vilka respektive lärare som är ansvariga för respektive kurs.
+// file.spec.js
+import { MY_VALUE, add } from './file';
 
-Skapa fler metoder, quitSubject, removeTeacher, relegateStudent, fireTeacher. I vilka objekt hör dessa metoder hemma? Och om vi till exempel sparkar en lärare, så måste vi ju ta bort lärarens koppling med skolan, och ämnet/ämnerna som läraren undervisar i. Hur löser vi detta i våra metoder, nu får vi börja tänka oss för lite.
+add(MY_VALUE, 5);
+// => 15
+Instructions
+Lucian's girlfriend is on her way home, and he hasn't cooked their anniversary dinner!
 
-Lek runt med dessa metoder i konsolen. Lägg till lite här och ta bort lite där. Rätt smidigt va?
+In this exercise, you're going to write some code to help Lucian cook an exquisite lasagna from his favorite cookbook.
 
-Ny bygger vi på det lite. För att undvika att behöva anropa massa metoder i konsolen när vi startar om programmet (vilket händer vid varje redigering av script-filen) så kan vi längst ner i script-filen skapa (alltså den koden läses in sist hela tiden) logik för att koppla några studenter till skolan, några ämnen till studenterna och några lärare till ämnena och så vidare. Skapa sån logik nu.
+You have four tasks related to the time spent cooking the lasagna.
 
-Skapa en funktion (OBS, en fristående funktion) , displayAllStudents som loopar igenom skolans alla studenter med hjälp av en for-loop. Tänk på att en vanlig for..of loop inte fungerar här (varför är det så?). Vi måste använda en for..IN loop, och en for..in loop låter oss loopa igenom ett objekts egenskaper (även kallad nycklar, keys) och på så sätt kunna koppa åt alla egenskaperna värde. Syntax:
+1. Define the expected oven time in minutes
+Define the EXPECTED_MINUTES_IN_OVEN constant that represents how many minutes the lasagna should be in the oven. It must be exported. According to the cooking book, the expected oven time in minutes is 40.
 
-for(keys in medieinstitutet.students) {/_logik för att printa ut studenterna_/};
-Länk, for-loops w3schools
+2. Calculate the remaining oven time in minutes
+Implement the remainingMinutesInOven function that takes the actual minutes the lasagna has been in the oven as a parameter and returns how many minutes the lasagna still has to remain in the oven, based on the expected oven time in minutes from the previous task.
 
-Länk om for..in loops specifikt.
+remainingMinutesInOven(30);
+// => 10
+3. Calculate the preparation time in minutes
+Implement the preparationTimeInMinutes function that takes the number of layers you added to the lasagna as a parameter and returns how many minutes you spent preparing the lasagna, assuming each layer takes you 2 minutes to prepare.
 
-Skapa nu fler funktioner, displayAllSubjectsOfStudent(student), displayAllStudentsEnlistedToSubject(subject), displayAllTeachers. Varje funktion bör ha något returvärde.
+preparationTimeInMinutes(2);
+// => 4
+4. Calculate the total working time in minutes
+Implement the totalTimeInMinutes function that takes two parameters: the numberOfLayers parameter is the number of layers you added to the lasagna, and the actualMinutesInOven parameter is the number of minutes the lasagna has been in the oven. The function should return how many minutes in total you've worked on cooking the lasagna, which is the sum of the preparation time in minutes, and the time in minutes the lasagna has spent in the oven at the moment.
 
-Bygg ut med ett ytterligare typ av objekt, lägg till objekt som handlar om betyg. Vilka egenskaper ska dessa ha? Vilka metoder kan behövas i dessa betygsobjekt? Hur ska relationen mellan de andra objekten vara? Vilka metoder bör finnas i de andra typerna av objekt som behandlar betyg? Försöka lösa detta och inspektera och lek runt med det i konsolen.
+totalTimeInMinutes(3, 20);
+// => 26
